@@ -1,58 +1,156 @@
-# Astro Bone Twin
+<p align="center">
+  <img src="apps/web/public/logo.png" alt="AstroHealth AI" width="96">
+</p>
 
-API-first demo for astronaut health monitoring: a contract-first FastAPI backend
-(bone-loss forecast, what-if countermeasure comparison, crew telemetry, NASA OSDR
-study logs) and a React mission-control UI on top of it.
-Built for the NASA Space Apps Challenge 2026.
+<h1 align="center">AstroHealth AI</h1>
 
-> Research prototype, not a medical device. Demo crew and biomarkers are **simulated**.
+<p align="center">
+  A bone-loss digital twin for spaceflight crews — a research prototype built on NASA's open
+  data for the NASA Space Apps Challenge 2026.
+</p>
 
-## Quick start
+<p align="center">
+  <a href="https://github.com/muhamedaldias/AstroHealth/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/muhamedaldias/AstroHealth/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Python 3.12+" src="https://img.shields.io/badge/Python-3.12%2B-306998?logo=python&logoColor=white">
+  <img alt="React 19" src="https://img.shields.io/badge/React%2019%20%2B%20Vite-TypeScript%20strict-149eca">
+  <img alt="Contract 0.1.4" src="https://img.shields.io/badge/OpenAPI%20contract-0.1.4-0d223a">
+  &nbsp;&nbsp;<a href="https://astrohealth-ai.vercel.app"><strong>Live demo →</strong></a>
+</p>
+
+---
+
+AstroHealth AI is a mission-control web platform for astronaut health. A contract-first FastAPI
+backend runs a calibrated statistical bone-loss engine and serves six NASA OSDR gene-expression
+studies, while a React 19 mission-control UI renders forecasts with uncertainty bands, crew
+telemetry, a searchable gene table — in English and Arabic, with full RTL support.
+
+> Research prototype, not a medical device. The crew and biomarkers are **simulated**, and every
+> forecast ships with its warnings and a physician-review flag by design.
+
+<p align="center">
+  <img src="docs/submission/screenshots/40-dashboard.png" alt="AstroHealth AI mission-control dashboard" width="720">
+  <br><em>Mission-control dashboard: radiation against the NASA 600 mSv limit, bone T-scores,
+  DNA-damage index and cellular-repair efficiency.</em>
+</p>
+
+## What it does
+
+- **Calibrated bone forecast** — pick a crew member, a mission scenario and countermeasures;
+  get per-site BMD change at mission end with 95% uncertainty bands and a risk level per site.
+- **Crew telemetry** — radiation dose against the NASA 600 mSv limit, T-scores, DNA-damage index
+  and cellular-repair efficiency, per crew member.
+- **NASA gene data** — six OSDR studies served offline, searchable, with a tested CSV export.
+- **Bio-Rescue protocol** — countermeasure guidance tied to the OSDR studies that motivate it.
+- **English and Arabic** — full UI translation with RTL layout, medical disclaimers included.
+- **Degrades honestly** — when the API is down the UI falls back to a static crew seed and shows
+  an offline chip instead of pretending everything is fine.
+
+## How the forecast works
+
+The engine is a closed-form statistical model — no black box. Four bone sites lose density at
+per-site monthly rates anchored to published values:
+
+| Bone site | Baseline loss |
+|---|---|
+| Lumbar spine | −1.15 %/month |
+| Femoral neck | −1.25 %/month |
+| Total hip | −1.35 %/month |
+| Distal tibia | −0.95 %/month |
+
+Countermeasures scale the loss: resistive exercise to 62% of baseline, flywheel to 82%,
+vitamin D + calcium to 95%, bisphosphonate to 48%. A CTX-based resorption ratio personalizes
+the rate per crew member, and uncertainty grows with √days. The multipliers and uncertainty
+are literature-grounded but remain illustrative — the honest caveat ships with every forecast.
+
+Sources: NASA-STD-3001, NASA's space-flight health fundamentals, ESA's "Preventing Bone Loss
+in Space", and Axpe et al. 2020 (npj Microgravity). Full detail in
+[docs/SCIENCE_NOTES.md](docs/SCIENCE_NOTES.md).
+
+## Quickstart
+
+Requirements: [uv](https://docs.astral.sh/uv/), Node 22+, GNU make (on Windows: Git Bash or WSL).
+
 ```bash
-make setup        # once: Python workspace (uv) + web deps (npm)
-make dev-api      # terminal 1 -> http://localhost:8000/docs
-make dev-web      # terminal 2 -> http://localhost:5173
-make check        # everything CI runs
-make docker-up    # all-in-one at http://localhost:8000
+git clone https://github.com/muhamedaldias/AstroHealth.git
+cd AstroHealth
+make setup        # Python workspace (uv) + web deps (npm)
+make dev-api      # API + docs at http://localhost:8000
+make dev-web      # UI at http://localhost:5173
 ```
-Requirements: [uv](https://docs.astral.sh/uv/), Node 22+, GNU make (Windows: Git Bash or WSL).
 
-## What's in the UI
-Five tabs (`apps/web/src/components/Header.tsx`), fed by the live API:
-- **Dashboard** — crew selector and vitals HUD for the selected astronaut.
-- **DNA & Telemetry** — DNA helix scanner, bone-density scanner, radiation telemetry chart.
-- **Bio-Rescue Protocol** — the astronaut's countermeasure / food-printer rescue plan.
-- **NASA Data Logs** — gene-expression table backed by real NASA OSDR studies.
-- **Bone Forecast** — worst-site predicted bone-density change and per-site CI bands from
-  the live engine via `POST /api/v1/forecast` (crew, scenario and countermeasure selection).
+One container instead:
 
-`POST /api/v1/whatif` remains a live contract endpoint without a dedicated UI panel today.
-
-## Contract-first workflow
-`contracts/openapi.yaml` is the single source of truth for every data shape:
-1. Edit the spec (contract PR approved by the owners).
-2. `make gen` regenerates the pydantic models, the TypeScript types and CODEOWNERS.
-3. Never hand-edit generated code (`packages/contracts_py/`, `apps/web/src/api/schema.d.ts`,
-   `.github/CODEOWNERS`).
-
-## Engines
-The forecast engine is pluggable via a registry (`packages/twin_core/src/twin_core/registry.py`):
-select with `BONETWIN_ENGINE=stub|calibrated` (default `stub`; this deployment runs `calibrated`).
-New engines register there and are automatically contract-checked by
-`tests/test_engine_contract.py`.
-
-## Layout
+```bash
+make docker-up    # UI + API together at http://localhost:8000
 ```
-contracts/            single source of truth (openapi.yaml + golden fixtures)
-packages/twin_core/   AI/Data engine (Python)          owner: AI/Data
-packages/contracts_py GENERATED pydantic models
-apps/api/             FastAPI backend                    owner: Backend
-apps/web/             React frontend                     owner: Frontend
-data/                 raw (ignored) / processed / runtime
-docs/                 architecture, science notes, team docs
-OWNERSHIP.yaml        who owns which path (generates CODEOWNERS)
-```
-See `docs/ARCHITECTURE.md` for the decisions and `docs/team/` for the team rules.
 
-## Data
-NASA Open Science Data Repository (OSDR): https://osdr.nasa.gov/bio/repo
+## Architecture
+
+Contract-first monorepo: one OpenAPI file is the single source of truth, Python and TypeScript
+types are generated from it, and CI fails on drift between any of them.
+
+| Piece | What it is |
+|---|---|
+| `apps/web` | React 19 + Vite 8 + Tailwind v4 + TanStack Query 5 — types come from the contract; hand-written UI types are forbidden |
+| `apps/api` | FastAPI — 12 routes under `/api/v1`, one `Error` shape for every non-2xx, unknown request fields rejected |
+| `packages/twin_core` | Registry-selected engines (stub / calibrated) — deterministic, and every registered engine is contract-checked in tests |
+| `contracts/` | OpenAPI 0.1.4 + golden fixtures + changelog discipline |
+
+The full decisions log lives in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## API
+
+| Method | Path | Returns |
+|---|---|---|
+| GET | `/api/v1/telemetry/crew` | simulated roster with engine-computed bone-loss risk |
+| POST | `/api/v1/forecast` | per-site forecast with 95% bands, risk levels, warnings |
+| GET | `/api/v1/osdr/studies` | six OSDR studies with a sync status |
+| GET | `/api/v1/scenarios`, `/countermeasures`, `/crew` | catalogs for the forecast form |
+
+## Data sources
+
+NASA OSDR accessions served offline as JSON bundles:
+`OSD-48`, `OSD-102`, `OSD-137`, `OSD-194`, `OSD-245`, `OSD-714` — [osdr.nasa.gov](https://osdr.nasa.gov/osdr/).
+
+## Testing
+
+```bash
+make check        # spec-lint + gen-check + lint + typecheck + pytest + web tests + build
+```
+
+56 backend tests (contract parity, engine contract, validation edges) plus a frontend vitest suite.
+
+## Deployment
+
+- **Docker** — one container builds the web app, then serves UI + API on a single port.
+- **Vercel** — static build + serverless `/api`, engine pinned to `calibrated`, in-memory SQLite.
+  Running live at [astrohealth-ai.vercel.app](https://astrohealth-ai.vercel.app).
+
+## Documentation
+
+| File | What's inside |
+|---|---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | the decisions log — why each stack choice, and what was rejected |
+| [docs/SCIENCE_NOTES.md](docs/SCIENCE_NOTES.md) | calibration constants, their sources and their limits |
+| [docs/AI_USAGE.md](docs/AI_USAGE.md) | how AI tooling was used — and what was not AI-generated |
+| [contracts/README.md](contracts/README.md) | how a contract change works |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | branch, generate, check, merge |
+
+## Limitations
+
+- Crew and biomarkers are simulated (`simulated_mission_telemetry`) — no real astronaut data.
+- The engine is literature-grounded but illustrative, and every forecast requires physician
+  review by design.
+- On Vercel the SQLite database is in-memory — measurement writes don't survive cold starts.
+- The offline fallback shows a static seed — don't assume on-screen data came from the API.
+
+## Team
+
+- [muhamed aldias](https://github.com/muhamedaldias)
+- [mram alharbi](https://github.com/Maram1ll)
+- manal
+- [TaghreedAhmad](https://github.com/TaghreedAhmad)
+
+## License
+
+© 2026 the AstroHealth team. A source license hasn't been selected yet — reach out before reuse.
