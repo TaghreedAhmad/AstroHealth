@@ -368,20 +368,22 @@ export interface components {
             label: string;
             countermeasure_ids: string[];
         };
+        /** @enum {string} */
+        BioRescueLang: "ar" | "en";
+        /** @enum {string} */
+        BioRescueSource: "gemini" | "fallback";
         BioRescueAdviceRequest: {
             space_days: number;
             radiation_msv: number;
             bone_loss_risk_percentage: number;
             dna_damage_index: number;
-            /** @enum {string} */
-            lang: "ar" | "en";
+            lang: components["schemas"]["BioRescueLang"];
         };
         BioRescueAdviceResponse: {
             recommendations: string[];
             genetic_explanation: string;
             disclaimer: string;
-            /** @enum {string} */
-            source: "gemini" | "fallback";
+            source: components["schemas"]["BioRescueSource"];
         };
         WhatIfRequest: {
             crew_id: string;

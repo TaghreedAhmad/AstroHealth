@@ -215,9 +215,14 @@ class WhatIfPlan(BaseModel):
     countermeasure_ids: list[str]
 
 
-class Lang(StrEnum):
+class BioRescueLang(StrEnum):
     ar = 'ar'
     en = 'en'
+
+
+class BioRescueSource(StrEnum):
+    gemini = 'gemini'
+    fallback = 'fallback'
 
 
 class BioRescueAdviceRequest(BaseModel):
@@ -225,19 +230,14 @@ class BioRescueAdviceRequest(BaseModel):
     radiation_msv: float
     bone_loss_risk_percentage: float
     dna_damage_index: float
-    lang: Lang
-
-
-class Source(StrEnum):
-    gemini = 'gemini'
-    fallback = 'fallback'
+    lang: BioRescueLang
 
 
 class BioRescueAdviceResponse(BaseModel):
     recommendations: Annotated[list[str], Field(max_length=6, min_length=1)]
     genetic_explanation: str
     disclaimer: str
-    source: Source
+    source: BioRescueSource
 
 
 class WhatIfRequest(BaseModel):

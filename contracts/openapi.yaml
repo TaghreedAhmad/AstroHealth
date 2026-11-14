@@ -534,6 +534,14 @@ components:
           type: array
           items: { type: string }
 
+    BioRescueLang:
+      type: string
+      enum: [ar, en]
+
+    BioRescueSource:
+      type: string
+      enum: [gemini, fallback]
+
     BioRescueAdviceRequest:
       type: object
       required: [space_days, radiation_msv, bone_loss_risk_percentage, dna_damage_index, lang]
@@ -542,7 +550,7 @@ components:
         radiation_msv: { type: number }
         bone_loss_risk_percentage: { type: number }
         dna_damage_index: { type: number }
-        lang: { type: string, enum: [ar, en] }
+        lang: { $ref: "#/components/schemas/BioRescueLang" }
 
     BioRescueAdviceResponse:
       type: object
@@ -555,7 +563,7 @@ components:
           items: { type: string }
         genetic_explanation: { type: string }
         disclaimer: { type: string }
-        source: { type: string, enum: [gemini, fallback] }
+        source: { $ref: "#/components/schemas/BioRescueSource" }
 
     WhatIfRequest:
       type: object
