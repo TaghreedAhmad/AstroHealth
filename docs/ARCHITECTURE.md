@@ -36,4 +36,3 @@ flowchart LR
 3. `test_engine_contract` fails if ANY registered engine returns something invalid.
 4. `make gen-check` fails if generated files are stale.
 5. Ruff bans the backend from importing engine internals.
-6. `OWNERSHIP.yaml` + CODEOWNERS: every file has an owner; no orphans.

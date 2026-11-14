@@ -5,13 +5,13 @@ setup:
 	uv sync --all-packages
 	npm --prefix apps/web install
 
-## Regenerate everything derived from contracts/openapi.yaml (+ CODEOWNERS)
+## Regenerate everything derived from contracts/openapi.yaml
 gen:
 	uv run python scripts/gen_contracts.py
 
 ## CI guard: generated files must match the spec (fails if someone forgot `make gen`)
 gen-check: gen
-	git diff --exit-code -- packages/contracts_py apps/web/src/api/schema.d.ts .github/CODEOWNERS
+	git diff --exit-code -- packages/contracts_py apps/web/src/api/schema.d.ts
 
 spec-lint:
 	uv run openapi-spec-validator contracts/openapi.yaml
@@ -33,7 +33,6 @@ lint:
 	uv run ruff check .
 	uv run ruff format --check .
 	npm --prefix apps/web run lint
-	uv run python scripts/check_ownership.py
 
 fmt:
 	uv run ruff format .

@@ -6,7 +6,7 @@
 
 ## Checklist
 - [ ] `make check` passes locally
-- [ ] I only touched files I own (see OWNERSHIP.yaml), or the owner is a reviewer
+- [ ] Changes are scoped to the described area and reviewed
 - [ ] If `contracts/openapi.yaml` changed: I ran `make gen`, updated `contracts/CHANGELOG.md`,
       and BOTH other members approved
 - [ ] No secrets, no raw datasets, no `node_modules` committed

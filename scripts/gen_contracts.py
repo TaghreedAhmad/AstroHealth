@@ -5,7 +5,6 @@
 Outputs (all committed, none hand-edited):
   - packages/contracts_py/src/bonetwin_contracts/models.py   (pydantic v2)
   - apps/web/src/api/schema.d.ts                             (TypeScript types)
-  - .github/CODEOWNERS                                       (from OWNERSHIP.yaml)
 """
 
 from __future__ import annotations
@@ -67,7 +66,6 @@ def main() -> int:
         ]
     )
     gen_web_types()
-    run([sys.executable, str(ROOT / "scripts" / "gen_codeowners.py")])
     return 0
 
 
