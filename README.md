@@ -153,4 +153,4 @@ make check        # spec-lint + gen-check + lint + typecheck + pytest + web test
 
 ## License
 
-© 2026 the AstroHealth team. A source license hasn't been selected yet — reach out before reuse.
+Released under the [MIT License](LICENSE).
