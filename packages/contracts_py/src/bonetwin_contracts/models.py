@@ -224,6 +224,31 @@ class WhatIfPlan(BaseModel):
     countermeasure_ids: list[str]
 
 
+class Lang(StrEnum):
+    ar = 'ar'
+    en = 'en'
+
+
+class BioRescueAdviceRequest(BaseModel):
+    space_days: float
+    radiation_msv: float
+    bone_loss_risk_percentage: float
+    dna_damage_index: float
+    lang: Lang
+
+
+class Source(StrEnum):
+    gemini = 'gemini'
+    fallback = 'fallback'
+
+
+class BioRescueAdviceResponse(BaseModel):
+    recommendations: Annotated[list[str], Field(max_length=6, min_length=1)]
+    genetic_explanation: str
+    disclaimer: str
+    source: Source
+
+
 class WhatIfRequest(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
