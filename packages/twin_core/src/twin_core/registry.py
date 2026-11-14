@@ -8,12 +8,13 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from .engines.bayes import BayesBoneEngine
 from .engines.stub import StubEngine
 from .protocol import Engine, EngineError
 
 _FACTORIES: dict[str, Callable[[], Engine]] = {
     "stub": StubEngine,
-    # "bayes": BayesBoneEngine,   # <- AI/Data owner registers the real engine here
+    "bayes": BayesBoneEngine,
 }
 
 
