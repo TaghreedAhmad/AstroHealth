@@ -1,10 +1,18 @@
 # Contributing
 
-Read `docs/team/TEAM_CONTRACT.md` (team rules), `docs/team/IO_MATRIX.md` (who gives what to whom)
-and `docs/team/CODING_STANDARDS.md`. Short version:
+Thanks for your interest in improving AstroHealth.
 
-1. Branch: `ai/`, `be/`, `fe/` or `contract/` + task name.
-2. Touch only files you own (`OWNERSHIP.yaml`).
-3. Shape of data changes only in `contracts/openapi.yaml` -> `make gen`.
-4. `make check` must pass before you push. CI runs the same command.
-5. Squash-merge; contract PRs need both other members' approval.
+## Workflow
+
+1. Branch from `main` with a short, descriptive name (`be/...`, `fe/...`, `ai/...`, `contract/...`).
+2. Shape-of-data changes happen only in `contracts/openapi.yaml` — then run `make gen`
+   and update `contracts/CHANGELOG.md`.
+3. `make check` must pass before every push. CI runs the exact same command.
+4. Keep pull requests small and single-purpose; squash-merge.
+
+## Ground rules
+
+- Generated files (`packages/contracts_py`, `apps/web/src/api/schema.d.ts`) are never
+  edited by hand — change the spec, then regenerate.
+- No secrets, no raw datasets, no build artifacts in commits.
+- Every forecast ships with its warnings and disclaimer — keep that contract intact.
