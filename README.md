@@ -120,11 +120,6 @@ make check        # spec-lint + gen-check + lint + typecheck + pytest + web test
 
 56 backend tests (contract parity, engine contract, validation edges) plus a frontend vitest suite.
 
-## Deployment
-
-- **Docker** — one container builds the web app, then serves UI + API on a single port.
-- **Vercel** — static build + serverless `/api`, engine pinned to `calibrated`, in-memory SQLite.
-  Running live at [astrohealth-ai.vercel.app](https://astrohealth-ai.vercel.app).
 
 ## Documentation
 
@@ -146,10 +141,11 @@ make check        # spec-lint + gen-check + lint + typecheck + pytest + web test
 
 ## Team
 
-- [muhamed aldias](https://github.com/muhamedaldias)
+- [muhammed aldias](https://github.com/muhamedaldias)
 - [mram alharbi](https://github.com/Maram1ll)
 - manal
 - [TaghreedAhmad](https://github.com/TaghreedAhmad)
+- Mohammed aljahni
 
 ## License
 
