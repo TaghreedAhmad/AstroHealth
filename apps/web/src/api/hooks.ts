@@ -8,6 +8,12 @@ export const useHealth = () =>
 export const useCrew = () =>
   useQuery({ queryKey: ["crew"], queryFn: async () => unwrap(await api.GET("/api/v1/crew")) });
 
+export const useScenarios = () =>
+  useQuery({
+    queryKey: ["scenarios"],
+    queryFn: async () => unwrap(await api.GET("/api/v1/scenarios")),
+  });
+
 export const useForecast = (crewId: string, scenarioId: string, countermeasureIds: string[]) =>
   useQuery({
     queryKey: ["forecast", crewId, scenarioId, countermeasureIds],
@@ -15,6 +21,21 @@ export const useForecast = (crewId: string, scenarioId: string, countermeasureId
       unwrap(
         await api.POST("/api/v1/forecast", {
           body: { crew_id: crewId, scenario_id: scenarioId, countermeasure_ids: countermeasureIds },
+        }),
+      ),
+  });
+
+export const useWhatIf = (
+  crewId: string,
+  scenarioId: string,
+  plans: { plan_id: string; label: string; countermeasure_ids: string[] }[],
+) =>
+  useQuery({
+    queryKey: ["whatif", crewId, scenarioId, plans],
+    queryFn: async () =>
+      unwrap(
+        await api.POST("/api/v1/whatif", {
+          body: { crew_id: crewId, scenario_id: scenarioId, plans },
         }),
       ),
   });

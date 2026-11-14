@@ -13,6 +13,7 @@ import { RiskSimulatorModal } from "./components/RiskSimulatorModal";
 import { RiskSimulatorPanel } from "./components/RiskSimulatorPanel";
 import { VitalsHUD } from "./components/VitalsHUD";
 import { ASTRONAUTS } from "./data/nasaGeneLabData";
+import { WhatIfComparison } from "./features/whatif/WhatIfComparison";
 import { translations } from "./i18n/translations";
 import type { Astronaut, Language } from "./types";
 
@@ -274,6 +275,7 @@ export default function App() {
         {activeTab === "risk-simulator" && (
           <div className="flex flex-col gap-6 animate-fade-in">
             <RiskSimulatorPanel astronaut={selectedAstronaut} lang={lang} />
+            <WhatIfComparison lang={lang} />
           </div>
         )}
       </main>

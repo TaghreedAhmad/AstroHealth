@@ -100,6 +100,16 @@ export interface TranslationDictionary {
   flightDossierTitle: string;
   printDossier: string;
   close: string;
+  whatIfTitle: string;
+  whatIfPlanNone: string;
+  whatIfPlanResist: string;
+  whatIfPlanResistBis: string;
+  whatIfHipLoss: string;
+  whatIfRisk: string;
+  whatIfReview: string;
+  whatIfLoading: string;
+  whatIfError: string;
+  whatIfNote: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -207,6 +217,16 @@ export const translations: Record<Language, TranslationDictionary> = {
     flightDossierTitle: "Simulated Mission Health Summary",
     printDossier: "Print / Save Summary",
     close: "Close",
+    whatIfTitle: "What-if: countermeasure plans",
+    whatIfPlanNone: "No countermeasure",
+    whatIfPlanResist: "Resistive exercise",
+    whatIfPlanResistBis: "Exercise + bisphosphonate",
+    whatIfHipLoss: "Total hip change at mission end (95% range)",
+    whatIfRisk: "Risk",
+    whatIfReview: "Flight surgeon review needed",
+    whatIfLoading: "Computing forecast...",
+    whatIfError: "Could not load the forecast.",
+    whatIfNote: "Illustrative model with placeholder parameters. Not a medical device.",
   },
   ar: {
     switchLanguage: "English",
@@ -306,5 +326,15 @@ export const translations: Record<Language, TranslationDictionary> = {
     flightDossierTitle: "ملخص صحي لمهمة فضائية محاكاة",
     printDossier: "طباعة / حفظ الملخص",
     close: "إغلاق",
+    whatIfTitle: "ماذا لو: خطط التدخل الوقائي",
+    whatIfPlanNone: "بدون تدخل",
+    whatIfPlanResist: "تمارين مقاومة",
+    whatIfPlanResistBis: "تمارين + بايفوسفونيت",
+    whatIfHipLoss: "تغيّر الورك الكلي نهاية المهمة (نطاق 95%)",
+    whatIfRisk: "الخطر",
+    whatIfReview: "يحتاج مراجعة طبيب الرحلة",
+    whatIfLoading: "جارٍ حساب التنبؤ...",
+    whatIfError: "تعذّر تحميل التنبؤ.",
+    whatIfNote: "نموذج توضيحي بمعاملات تقريبية، وليس جهازاً طبياً.",
   },
 };
