@@ -20,11 +20,7 @@ export const useScenarios = () =>
     queryFn: async () => unwrap(await api.GET("/api/v1/scenarios")),
   });
 
-export const useForecast = (
-  crewId: string,
-  scenarioId: string,
-  countermeasureIds: string[],
-) =>
+export const useForecast = (crewId: string, scenarioId: string, countermeasureIds: string[]) =>
   useQuery({
     queryKey: ["forecast", crewId, scenarioId, countermeasureIds],
     queryFn: async () =>
@@ -75,4 +71,41 @@ export const useTelemetryCrew = () =>
       const payload = unwrap(await api.GET("/api/v1/telemetry/crew"));
       return payload.crew;
     },
+  });
+
+export const useOsdrStudies = () =>
+  useQuery({
+    queryKey: ["osdr-studies"],
+    queryFn: async () => unwrap(await api.GET("/api/v1/osdr/studies")),
+    refetchInterval: (query) => (query.state.data?.sync_status === "syncing" ? 2500 : false),
+  });
+
+export const useBioRescueAdvice = (
+  spaceDays: number,
+  radiationMsv: number,
+  boneLossRiskPercentage: number,
+  dnaDamageIndex: number,
+  lang: "ar" | "en",
+) =>
+  useQuery({
+    queryKey: [
+      "bio-rescue-advice",
+      spaceDays,
+      radiationMsv,
+      boneLossRiskPercentage,
+      dnaDamageIndex,
+      lang,
+    ],
+    queryFn: async () =>
+      unwrap(
+        await api.POST("/api/v1/bio-rescue/advice", {
+          body: {
+            space_days: spaceDays,
+            radiation_msv: radiationMsv,
+            bone_loss_risk_percentage: boneLossRiskPercentage,
+            dna_damage_index: dnaDamageIndex,
+            lang,
+          },
+        }),
+      ),
   });
