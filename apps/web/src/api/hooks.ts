@@ -1,4 +1,3 @@
-
 // TanStack Query hooks. Components call these; they never call `api` directly.
 import { useQuery } from "@tanstack/react-query";
 import { api, unwrap } from "./client";
@@ -21,11 +20,7 @@ export const useScenarios = () =>
     queryFn: async () => unwrap(await api.GET("/api/v1/scenarios")),
   });
 
-export const useForecast = (
-  crewId: string,
-  scenarioId: string,
-  countermeasureIds: string[],
-) =>
+export const useForecast = (crewId: string, scenarioId: string, countermeasureIds: string[]) =>
   useQuery({
     queryKey: ["forecast", crewId, scenarioId, countermeasureIds],
     queryFn: async () =>
@@ -76,8 +71,7 @@ export const useOsdrStudies = () =>
   useQuery({
     queryKey: ["osdr-studies"],
     queryFn: async () => unwrap(await api.GET("/api/v1/osdr/studies")),
-    refetchInterval: (query) =>
-      query.state.data?.sync_status === "syncing" ? 2500 : false,
+    refetchInterval: (query) => (query.state.data?.sync_status === "syncing" ? 2500 : false),
   });
 
 export const useBioRescueAdvice = (
